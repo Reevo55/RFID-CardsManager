@@ -67,7 +67,14 @@ def printAllReadings():
     c.execute("SELECT Employees.Name, Cards.Identifier, Readings.Date, Readings.WentIn FROM((Readings INNER JOIN Cards ON Readings.IdCard = Cards.IdCard) INNER JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee);")
     for reading in c.fetchall():
         print(reading)
+        print("\n")
 
+def printReadingsForEmployee(employeeId):
+    data = (employeeId,)
+    c.execute("SELECT Employees.Name, Cards.Identifier, Readings.Date, Readings.WentIn FROM((Readings INNER JOIN Cards ON Readings.IdCard = Cards.IdCard) INNER JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee)  WHERE Employees.IdEmployee = ?", data)
+    for reading in c.fetchall():
+        print(reading)
+        print("\n")     
 
 def fullStringReadingsOfEmployee(employeeId):
     data = (employeeId,)
@@ -85,11 +92,13 @@ def printAllEmployees():
     c.execute("SELECT * FROM Employees")
     for employee in c.fetchall():
         print(employee)
+        print("\n")
 
 def printAllCards():
-    c.execute("SELECT Cards.IdCard, Cards.Identifier, Employees.Name FROM Cards INNER JOIN Employees ON Cards.IdCard = Employees.IdEmployee;")
+    c.execute("SELECT Cards.IdCard, Cards.Identifier, Employees.Name FROM Cards INNER JOIN Employees ON Cards.IdCard = Employees.IdEmployee ORDER BY Cards.IdCard;")
     for card in c.fetchall():
         print(card)
+        print("\n")
 
 def saveChangesInDatabase():
     conn.commit()
