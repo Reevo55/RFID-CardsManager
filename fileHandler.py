@@ -21,7 +21,8 @@ def calculateWorkingTime(arrayOfReadings):
         if reading.WentIn == 1:
             currentEntryTime = reading.Date
         elif currentEntryTime != "" and reading.WentIn == 0:
-            sumOfWorkingHours += diffrenceInTime(currentEntryTime, reading.Date)\
+            sumOfWorkingHours += diffrenceInTime(currentEntryTime, reading.Date)
+            currentEntryTime = ""
     
     return sumOfWorkingHours
 
