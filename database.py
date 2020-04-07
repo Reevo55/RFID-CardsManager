@@ -87,6 +87,13 @@ def fullStringReadingsOfEmployee(employeeId):
     return arrOfReadings
 
 
+def getIdOfCardByRFID(rfid):
+    data = (rfid,)
+    c.execute("SELECT * FROM Cards")
+    for card in c.fetchall():
+        print(card[0])
+        return card[0]
+    return None
 
 def printAllEmployees():
     c.execute("SELECT * FROM Employees")
