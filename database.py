@@ -64,7 +64,8 @@ def resetEmployeeFromCard(idCard):
     c.execute("UPDATE Cards SET IdEmployee = NULL WHERE IdCard = ?", data)
 
 def printAllReadings():
-    c.execute("SELECT Employees.Name, Cards.Identifier, Readings.Date, Readings.WentIn FROM((Readings INNER JOIN Cards ON Readings.IdCard = Cards.IdCard) INNER JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee);")
+    c.execute("SELECT Employees.Name, Cards.Identifier, Readings.Date, Readings.WentIn FROM((Readings LEFT JOIN Cards ON Readings.IdCard = Cards.IdCard) LEFT JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee);")
+    print("Name | Identifier | Date | WentIn")
     for reading in c.fetchall():
         print(reading)
         print("\n")
@@ -72,6 +73,7 @@ def printAllReadings():
 def printReadingsForEmployee(employeeId):
     data = (employeeId,)
     c.execute("SELECT Employees.Name, Cards.Identifier, Readings.Date, Readings.WentIn FROM((Readings INNER JOIN Cards ON Readings.IdCard = Cards.IdCard) INNER JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee)  WHERE Employees.IdEmployee = ?", data)
+    print("Name | Identifier | Date | WentIn")
     for reading in c.fetchall():
         print(reading)
         print("\n")     
@@ -97,12 +99,14 @@ def getIdOfCardByRFID(rfid):
 
 def printAllEmployees():
     c.execute("SELECT * FROM Employees")
+    print("IdEmployee | Name")
     for employee in c.fetchall():
         print(employee)
         print("\n")
 
 def printAllCards():
-    c.execute("SELECT Cards.IdCard, Cards.Identifier, Employees.Name FROM Cards INNER JOIN Employees ON Cards.IdCard = Employees.IdEmployee ORDER BY Cards.IdCard;")
+    c.execute("SELECT Cards.IdCard, Cards.Identifier, Cards.IdEmployee, Employees.Name FROM Cards LEFT JOIN Employees ON Cards.IdEmployee = Employees.IdEmployee;")
+    print("IdCard | Identifier | IdEmployee | Name")
     for card in c.fetchall():
         print(card)
         print("\n")

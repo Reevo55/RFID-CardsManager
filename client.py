@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 
-broker = "127.0.0.1"
+broker = "DESKTOP-KPVCDVG"
+port=8883
 
 print("Podaj identyfikator tego terminalu: ")
 terminal_id = input()
@@ -11,13 +12,17 @@ if not (entryTerminal == "1" or entryTerminal == "0"):
     print("Blad podania! Ustawiam terminal na wejsciowy!")
     entryTerminal = "0"
 
+
+
 def scanCard(rfid_identifier):
-    client.publish("terminal", rfid_identifier + "." + terminal_id + "." + str(entryTerminal),)
+    client.publish("worker/name", rfid_identifier + "." + terminal_id + "." + str(entryTerminal),)
 
 def connect_to_broker():
-    client.connect(broker)
+    client.tls_set("C:\Program Files\mosquitto\certs\ca.crt") # provide path to certification
+    client.username_pw_set(username='client', password='password')  
+    client.connect(broker, port)
     scanCard("Client connected")
-
+    client.subscribe("server/name")
 
 def disconnect_from_broker():
     scanCard("Client disconnected")
@@ -32,7 +37,7 @@ def main():
         userInput = input()
 
         if userInput == "1":
-            print("Podaj kod RFID karty (identyfikator):")
+            print("Podaj kod RFID karty:")
             rfid = input()
             scanCard(rfid)
         elif userInput == "0":
